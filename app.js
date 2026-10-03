@@ -24,6 +24,12 @@ app.get("/", (req, res) =>
   res.render("index", { title: "Mini Messageboard", messages: messages }),
 );
 app.get("/new", (req, res) => res.render("form"));
+app.get("/messages/:id", (req, res) => {
+  const msgId = req.params.id;
+  const msg = messages[msgId];
+
+  res.render("messages", { message: msg });
+});
 app.post("/new", (req, res) => {
   const author = req.body.author;
   const msg = req.body.msg;
