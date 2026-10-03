@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("node:path");
 const app = express();
 
 const messages = [
@@ -14,7 +15,12 @@ const messages = [
   },
 ];
 
-app.get("/", (req, res) => res.send("Hello World"));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) =>
+  res.render("index", { title: "Mini Messageboard", messages: messages }),
+);
 app.get("/new", (req, res) => res.send("new message form here"));
 
 const PORT = 3000;
