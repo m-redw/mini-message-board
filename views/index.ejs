@@ -6,11 +6,11 @@
     <title>Mini-Message-App</title>
   </head>
   <body>
-    <% messages.forEach((message, index)=> {%>
-        <p><%= message.user %></p>
-        <p><%= message.text %></p>
-        <p><%= message.date %></p>
-        <a href="/messages/<%= index %>">Message details.</a>
+    <% messages.forEach((message)=> {%>
+        <p><%= message.username %></p>
+        <p><%= message.message %></p>
+        <p><%= message.added %></p>
+        <a href="/messages/<%= message.id %>">Message details.</a>
     <% }) %>
 
     <a href="/new">Create a new message.</a>

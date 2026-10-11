@@ -1,17 +1,8 @@
-const messages = [
-  {
-    text: "Hi there!",
-    user: "Amando",
-    added: new Date(),
-  },
-  {
-    text: "Hello World!",
-    user: "Charles",
-    added: new Date(),
-  },
-];
+const queries = require("../db/queries");
 
 async function getMiniMB(req, res) {
+  const messages = await queries.getAllMessages();
+  console.log("Messages: ", messages);
   res.render("index", { title: "Mini Messageboard", messages: messages });
 }
 
@@ -21,7 +12,8 @@ async function getForm(req, res) {
 
 async function getMessage(req, res) {
   const msgId = req.params.id;
-  const msg = messages[msgId];
+  const msg = await queries.getMessage(msgId);
+  console.log("Message: ", msg);
 
   res.render("messages", { message: msg });
 }
@@ -29,7 +21,7 @@ async function getMessage(req, res) {
 async function postMessage(req, res) {
   const author = req.body.author;
   const msg = req.body.msg;
-  messages.push({ text: msg, user: author, added: new Date() });
+  queries.insertMessage(author, msg, new Date());
   res.redirect("/");
 }
 
