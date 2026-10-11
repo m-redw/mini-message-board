@@ -1,4 +1,22 @@
 const queries = require("../db/queries");
+const { body, validationResult, matchedData } = require("express-validator");
+
+const validateUser = [
+  body("author")
+    .trim()
+    .isAscii()
+    .withMessage("Username must be ASCII characters.")
+    .isLength({ min: 1, max: 15 })
+    .withMessage("Username must be 1-15 characters long.")
+    .escape(),
+  body("msg")
+    .trim()
+    .isAscii()
+    .withMessage("Message must be ASCII characters.")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Message must be 1-100 characters long.")
+    .escape(),
+];
 
 async function getMiniMB(req, res) {
   const messages = await queries.getAllMessages();
@@ -7,7 +25,7 @@ async function getMiniMB(req, res) {
 }
 
 async function getForm(req, res) {
-  res.render("form");
+  res.render("form", { author: "", msg: "" });
 }
 
 async function getMessage(req, res) {
@@ -18,12 +36,22 @@ async function getMessage(req, res) {
   res.render("messages", { message: msg });
 }
 
-async function postMessage(req, res) {
-  const author = req.body.author;
-  const msg = req.body.msg;
-  queries.insertMessage(author, msg, new Date());
-  res.redirect("/");
-}
+postMessage = [
+  validateUser,
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("form", {
+        author: req.body.author,
+        msg: req.body.msg,
+        errors: errors.array(),
+      });
+    }
+    const { author, msg } = matchedData(req);
+    queries.insertMessage(author, msg, new Date());
+    res.redirect("/");
+  },
+];
 
 module.exports = {
   getMiniMB,

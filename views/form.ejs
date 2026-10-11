@@ -10,14 +10,16 @@
       <h1></h1>
       <label>
         Author name:
-        <input type="text" id="author" name="author" />
+        <input type="text" id="author" name="author" value="<%=author%>" />
       </label>
 
       <label>
         Message text:
-        <input type="text" id="msg" name="msg" />
+        <input type="text" id="msg" name="msg" value="<%=msg%>" />
       </label>
       <button>Submit</button>
     </form>
+
+    <%- include("partials/errors.ejs") %>
   </body>
 </html>
