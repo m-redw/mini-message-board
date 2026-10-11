@@ -1,6 +1,9 @@
 const { Pool } = require("pg");
 const { loadEnvFile } = require("node:process");
-loadEnvFile();
+
+if (process.env.NODE_ENV !== "production") {
+  loadEnvFile();
+}
 
 module.exports = new Pool({
   //   host: process.env.DB_HOST,

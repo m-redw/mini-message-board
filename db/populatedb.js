@@ -2,7 +2,10 @@
 
 const { Client } = require("pg");
 const { loadEnvFile } = require("node:process");
-loadEnvFile();
+
+if (process.env.NODE_ENV !== "production") {
+  loadEnvFile();
+}
 
 const SQL = `
 CREATE TABLE IF NOT EXISTS messages (
